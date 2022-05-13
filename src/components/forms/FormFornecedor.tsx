@@ -27,7 +27,7 @@ const  handleFornecedoresFormInputsChange = (event: any) => {
     setFormValues({
       ...formValues,
       [event.target.name]: event.target.value    
-    });
+    })
   }
 
   const HandlerFornecedoresFormSubmit = (e: FormEvent) => {
