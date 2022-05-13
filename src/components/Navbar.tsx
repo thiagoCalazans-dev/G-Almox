@@ -20,7 +20,7 @@ const Navitens = {
       href: "/private/execucao/entrada",
     },
     2: {
-      name: "saida",
+      name: "Saída",
       href: "/private/execucao/saida",
     },
   },
