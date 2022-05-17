@@ -1,6 +1,6 @@
 export interface Fornecedores {
-    id: number;
-    nome: string,
+  id: number;
+  nome: string,
   cnpj: string,
   cep: string,
   cidade: string,

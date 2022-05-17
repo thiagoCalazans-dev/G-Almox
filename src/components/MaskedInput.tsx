@@ -1,4 +1,4 @@
-import React, { ChangeEventHandler } from 'react';
+import React, { ChangeEventHandler, FormEvent, ReactEventHandler } from 'react';
 import InputMask from 'react-input-mask';
 
 const onlyNumbers = (str: string) => str.replace(/[^0-9]/g, '');
@@ -8,28 +8,33 @@ type Props = {
     onChange: ({}) => void;
     name: string;
     mask: string;
+    className: string;
+    placeholder: string;
 }
 
 
-const MaskedInput = ({ value, onChange, name, mask }: Props) => {
+const MaskedInput = ({ value, onChange, name, mask, className, placeholder }: Props) => {
     
-// function handleChange(event: string) {
-//     onChange({
-//       ...event,
-//       target: {
-//         ...event.target,
-//         name,
-//         value: onlyNumbers(event.target.value)
-//       }
-//     });
-//   }
+function handleChange(event: any ) {
+    onChange({
+      ...event,
+      target: {
+        ...event.target,
+        name,
+        value: onlyNumbers(event.target.value)
+      }
+    });
+  }
 
    return (
     <InputMask
+    className={className}
       name={name}
       mask={mask}
       value={value}
-      onChange={onChange}
+      type="text"
+      onChange={handleChange}
+      placeholder={placeholder}
     />
   );
 };
