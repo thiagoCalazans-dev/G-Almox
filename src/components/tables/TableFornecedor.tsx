@@ -54,7 +54,7 @@ export const TableFornecedor = ({fornecedores}: Props) => {
       </RadioGroup.Option>
       )})} 
       <div className= "grow flex justify-center">
-                <input className="bg-zinc-800 rounded-sm w-10/12 text-center  focus:w-full focus:transition-all focus:outline-none focus:shadow-sm focus:border-brand-500" 
+                <input className="bg-zinc-800 rounded-sm w-10/12 text-center  focus:outline-none focus:opacity-90 focus:outline-brand-500 " 
          placeholder={`Pesquisar: ${radioItem.toUpperCase()}`}
          value = {searchValue}
          onChange= {handleSearch}

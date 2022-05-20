@@ -5,6 +5,7 @@ export interface Fornecedores {
   cep: string,
   cidade: string,
   endereco: string,
+  bairro: string,
   numero: string,
   complemento: string,
 }
