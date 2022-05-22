@@ -36,4 +36,17 @@ export const fornecedorlist = [
       complemento:'', 
     },
   ];
+
+  export const produtoslist = [
+    {
+      id: 1,
+      nome: "caneta",
+      unidade: "unidade"
+    },
+    {
+      id: 2,
+      nome: "folha sulfite",
+      unidade: "resma"
+    }
+  ]
   

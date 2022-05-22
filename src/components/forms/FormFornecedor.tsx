@@ -4,7 +4,6 @@ import { Fornecedores } from "../../interfaces/Fornecedores";
 import * as Yup from "yup";
 import { FormField } from "../FormField";
 import { ChangeEvent, FormEvent } from "react";
-import error from "next/error";
 import { Button } from "../Button";
 
 type Props = {
@@ -39,7 +38,7 @@ const schema = Yup.object().shape({
   complemento: Yup.string(),
 });
 
-export const FormCadFornecedor = ({ onSubmit }: Props) => {
+export const FormFornecedor = ({ onSubmit }: Props) => {
   const handleSubmit = (
     values: Fornecedores,
     resetForm: (nextState?: Partial<FormikState<Fornecedores>>) => void
