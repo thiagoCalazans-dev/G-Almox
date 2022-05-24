@@ -1,10 +1,10 @@
 import { Pen, Trash } from "phosphor-react";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, MouseEventHandler, useState } from "react";
 import {Fornecedores} from "../../interfaces/Fornecedores"
 import { RadioGroup } from '@headlessui/react'
 
 type Props = {
-  fornecedores: Fornecedores[]
+  fornecedores: Fornecedores[] 
 }
 
 type Radio = 'nome' | 'cnpj' | 'cep'
@@ -24,6 +24,7 @@ const searchItens = {
 }
 
 export const TableFornecedor = ({fornecedores}: Props) => {
+
 
   const [searchValue, setSearchValue] = useState('');
   const [radioItem, setRadioitem] = useState<Radio>('nome')

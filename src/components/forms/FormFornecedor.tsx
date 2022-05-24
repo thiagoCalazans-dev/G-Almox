@@ -22,7 +22,7 @@ const initialValues = {
   complemento: "",
 };
 
-const schema = Yup.object().shape({
+export const schema = Yup.object().shape({
   id: Yup.number(),
   nome: Yup.string().required("Campo obrigatório"),
   cnpj: Yup.string().length(14, "Cnpj inválido").required("Campo obrigatório "),
