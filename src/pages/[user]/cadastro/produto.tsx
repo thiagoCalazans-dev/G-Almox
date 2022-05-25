@@ -20,16 +20,17 @@ const Produto = () => {
     <div className="w-screen h-screen flex flex-col">
       <Navbar />
       <div className="flex flex-col items-center w-full h-full justify-center">
-        <div className=" flex  flex-col w-1/2 items-center p-6 bg-zinc-800 shadow-sm shadow-zinc-800">       
+        <div className=" flex  flex-col w-1/2 items-center p-6 bg-zinc-800 shadow-sm shadow-zinc-800 rounded-xl">       
           <TableProdutos produtos={produtos} />   
           <div>
           <Button type="button" onClick={openModal}>
             Cadastrar
-          </Button>
-          </div>
-            <Modal title="Cadastro de produto"modal={modal} closeModal={closeModal}>
+          </Button>        
+            </div>         
+              <Modal title="Cadastro de produto"modal={modal} closeModal={closeModal}>
             <FormProduto closeOnSubmit={closeModal} />
           </Modal>
+       
         </div>
       </div>
     </div>

@@ -38,13 +38,13 @@ export const Modal = ({title, children, modal, closeModal }: Props) => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full transform overflow-hidden rounded-2xl bg-zinc-800 p-6 shadow-xl transition-all">
-                  <Dialog.Title
+                <Dialog.Panel className="w-auto transform overflow-hidden rounded-2xl bg-zinc-800 p-6 transition-all">
+                  {title && <Dialog.Title
                     as="h3"
                     className="text-3xl font-bold mb-6 leading-6 text-zinc-100 text-center"
                   >
                     {title}
-                  </Dialog.Title>
+                  </Dialog.Title>}
                 {children}
                 </Dialog.Panel>
               </Transition.Child>
