@@ -3,6 +3,7 @@ import { Produto } from "../../interfaces/Produto";
 import { FormField } from "../FormField";
 import * as Yup from "yup";
 import { Button } from "../Button";
+import { Fornecedor } from "../../interfaces/Fornecedores";
 
 
 type Props = {
@@ -13,6 +14,9 @@ const initialValues = {
   nome: "",
   unidade: "",
 };
+
+
+
 
 export const FormProduto = ({closeOnSubmit}: Props) => {
   const schema = Yup.object().shape({

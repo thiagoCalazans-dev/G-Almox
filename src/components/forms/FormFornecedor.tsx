@@ -6,6 +6,7 @@ import { FormField } from "../FormField";
 import { ChangeEvent, FormEvent } from "react";
 import { Button } from "../Button";
 import { useRouter } from "next/router";
+import { createFornecedor } from "../../server/services/fornecedoresService";
 
 type Props = {
   onSubmit: (formValues: Fornecedor) => void;
@@ -39,22 +40,38 @@ export const schema = Yup.object().shape({
   complemento: Yup.string(),
 });
 
+export const FormFornecedor = () => {
 
+  const router = useRouter();
+  const refreshData = () => {
+    router.reload();
+  };
 
-export const FormFornecedor = ({ onSubmit }: Props) => {
+  async function PostFornecedor(data: Fornecedor) {
+    try {
+      fetch('http://localhost:3000/api/fornecedores/create', {
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        method: 'POST'
+      })                   
+    } catch (error) {
+      console.log(error);
+    }
+  } 
+
   const handleSubmit = async (
     values: Fornecedor,
     resetForm: (nextState?: Partial<FormikState<Fornecedor>>) => void
-  ) => {   
-    await onSubmit(values)
-    resetForm({ values: initialValues });
-    refreshData();
+  ) => {    
+    await PostFornecedor(values).then((values) => {      
+      resetForm({ values: initialValues });
+      //refreshData();
+    });
   };
 
-  const router = useRouter()
-const refreshData = () => {
-  router.reload()
-}
+
 
   const handleClickSearchCEP = (values: Fornecedor, setFieldValue: any) => {
     const cep = values.cep.replace(/[^0-9]/g, "");
@@ -66,7 +83,7 @@ const refreshData = () => {
         setFieldValue("bairro", data.bairro);
         setFieldValue("cidade", data.localidade);
         setFieldValue("estado", data.uf);
-    });
+      });
   };
 
   return (

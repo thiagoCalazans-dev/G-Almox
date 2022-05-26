@@ -1,7 +1,7 @@
-import { prisma } from "../../../lib/prisma";
+import { prisma } from "../../../server/prisma";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Fornecedor } from "../../../interfaces/Fornecedores";
-import { createFornecedor } from "../../../lib/services/fornecedoresService";
+import { createFornecedor } from "../../../server/services/fornecedoresService";
 
 export default async function handler(
   req: NextApiRequest,
