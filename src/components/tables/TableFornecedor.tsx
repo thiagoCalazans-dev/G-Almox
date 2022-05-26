@@ -1,10 +1,10 @@
 import { Pen, Trash } from "phosphor-react";
 import { ChangeEvent, MouseEventHandler, useState } from "react";
-import {Fornecedores} from "../../interfaces/Fornecedores"
+import {Fornecedor} from "../../interfaces/Fornecedores"
 import { RadioGroup } from '@headlessui/react'
 
 type Props = {
-  fornecedores: Fornecedores[] 
+  fornecedores: Fornecedor[] 
 }
 
 type Radio = 'nome' | 'cnpj' | 'cep'

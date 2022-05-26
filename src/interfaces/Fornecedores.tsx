@@ -1,4 +1,4 @@
-export interface Fornecedores {
+export interface Fornecedor {
   id: number;
   nome: string,
   cnpj: string,

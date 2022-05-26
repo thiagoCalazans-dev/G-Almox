@@ -1,13 +1,14 @@
 import { ErrorMessage, Field, Form, Formik, FormikState } from "formik";
 import { FloppyDisk, MagnifyingGlass } from "phosphor-react";
-import { Fornecedores } from "../../interfaces/Fornecedores";
+import { Fornecedor } from "../../interfaces/Fornecedores";
 import * as Yup from "yup";
 import { FormField } from "../FormField";
 import { ChangeEvent, FormEvent } from "react";
 import { Button } from "../Button";
+import { useRouter } from "next/router";
 
 type Props = {
-  onSubmit: (formValues: Fornecedores) => void;
+  onSubmit: (formValues: Fornecedor) => void;
 };
 
 const initialValues = {
@@ -38,17 +39,24 @@ export const schema = Yup.object().shape({
   complemento: Yup.string(),
 });
 
+
+
 export const FormFornecedor = ({ onSubmit }: Props) => {
-  const handleSubmit = (
-    values: Fornecedores,
-    resetForm: (nextState?: Partial<FormikState<Fornecedores>>) => void
-  ) => {
-    console.log(values);
-    onSubmit(values);
+  const handleSubmit = async (
+    values: Fornecedor,
+    resetForm: (nextState?: Partial<FormikState<Fornecedor>>) => void
+  ) => {   
+    await onSubmit(values)
     resetForm({ values: initialValues });
+    refreshData();
   };
 
-  const handleClickSearchCEP = (values: Fornecedores, setFieldValue: any) => {
+  const router = useRouter()
+const refreshData = () => {
+  router.reload()
+}
+
+  const handleClickSearchCEP = (values: Fornecedor, setFieldValue: any) => {
     const cep = values.cep.replace(/[^0-9]/g, "");
     if (cep.length !== 8) return;
     fetch(`https://viacep.com.br/ws/${cep}/json/`)
@@ -58,8 +66,7 @@ export const FormFornecedor = ({ onSubmit }: Props) => {
         setFieldValue("bairro", data.bairro);
         setFieldValue("cidade", data.localidade);
         setFieldValue("estado", data.uf);
-        console.log(data);
-      });
+    });
   };
 
   return (

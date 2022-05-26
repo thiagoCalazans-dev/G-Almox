@@ -2,16 +2,43 @@ import { useState } from "react";
 import { FormFornecedor } from "../../../components/forms/FormFornecedor";
 import { Navbar } from "../../../components/Navbar";
 import { TableFornecedor } from "../../../components/tables/TableFornecedor";
-import { Fornecedores } from "../../../interfaces/Fornecedores";
+import { Fornecedor } from "../../../interfaces/Fornecedores";
 import {fornecedorlist} from "../../../../data"
+import { GetServerSideProps } from "next";
+import { getAllFornecedores } from "../../../lib/services/fornecedoresService";
+import { useRouter } from "next/router";
 
-const Fornecedor = () => {
+type propsPage = {
+  fornecedores: Fornecedor[]
+}
 
-  const [fornecedores, setFornecedores] = useState<Fornecedores[]>(fornecedorlist)
-
-  const handleSubmit = (e: Fornecedores) => {
-    setFornecedores([...fornecedores, e])
+const Fornecedor = ({fornecedores}: propsPage) => {
+  
+  const router = useRouter()
+  const refreshData = () => {
+    router.replace(router.asPath)
   }
+
+
+  async function create(data: Fornecedor) {
+    try {
+      fetch('http://localhost:3000/api/fornecedores/create', {
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        method: 'POST'
+      })                   
+    } catch (error) {
+      console.log(error);
+    }
+  } 
+
+  const [listFornecedores, setListFornecedores] = useState<Fornecedor[]>(fornecedores)
+
+  const handleSubmit = async (data: Fornecedor) => {     
+        await create(data)             
+    }
 
   return (
     <div className="w-screen h-screen flex flex-col">
@@ -21,11 +48,21 @@ const Fornecedor = () => {
        <FormFornecedor onSubmit={handleSubmit}/>
        </div>
       <div className="w-2/3 lg:w-[600px]" >
-      <TableFornecedor fornecedores={fornecedores}/>
+      <TableFornecedor fornecedores={listFornecedores}/>
       </div>
       </div>
     </div>
   );
 };
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const fornecedores = await getAllFornecedores();
+  return {
+    props: {
+      fornecedores,
+    },
+  };
+};
+
 
 export default Fornecedor;

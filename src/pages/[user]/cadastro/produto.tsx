@@ -29,8 +29,7 @@ const Produto = () => {
             </div>         
               <Modal title="Cadastro de produto"modal={modal} closeModal={closeModal}>
             <FormProduto closeOnSubmit={closeModal} />
-          </Modal>
-       
+          </Modal>       
         </div>
       </div>
     </div>
