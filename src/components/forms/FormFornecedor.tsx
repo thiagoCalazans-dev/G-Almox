@@ -1,15 +1,14 @@
-import { ErrorMessage, Field, Form, Formik, FormikState } from "formik";
 import { FloppyDisk, MagnifyingGlass } from "phosphor-react";
 import { Fornecedor } from "../../interfaces/Fornecedores";
 import * as Yup from "yup";
 import { FormField } from "../FormField";
-import { ChangeEvent, FormEvent } from "react";
 import { Button } from "../Button";
-import { useRouter } from "next/router";
-import { createFornecedor } from "../../server/services/fornecedoresService";
+import api from "../../services/api";
+import { Form, Formik, FormikState } from "formik";
+
 
 type Props = {
-  onSubmit: (formValues: Fornecedor) => void;
+  onSubmit: (value: Fornecedor) => Promise<void>;
 };
 
 const initialValues = {
@@ -40,38 +39,19 @@ export const schema = Yup.object().shape({
   complemento: Yup.string(),
 });
 
-export const FormFornecedor = () => {
-
-  const router = useRouter();
-  const refreshData = () => {
-    router.reload();
-  };
-
-  async function PostFornecedor(data: Fornecedor) {
-    try {
-      fetch('http://localhost:3000/api/fornecedores/create', {
-        body: JSON.stringify(data),
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        method: 'POST'
-      })                   
-    } catch (error) {
-      console.log(error);
-    }
-  } 
+export const FormFornecedor = ({ onSubmit }: Props) => {
 
   const handleSubmit = async (
     values: Fornecedor,
     resetForm: (nextState?: Partial<FormikState<Fornecedor>>) => void
-  ) => {    
-    await PostFornecedor(values).then((values) => {      
+  ) => {
+    try {
+      await onSubmit(values);
       resetForm({ values: initialValues });
-      //refreshData();
-    });
+    } catch (err) {
+      console.log(err);
+    }
   };
-
-
 
   const handleClickSearchCEP = (values: Fornecedor, setFieldValue: any) => {
     const cep = values.cep.replace(/[^0-9]/g, "");

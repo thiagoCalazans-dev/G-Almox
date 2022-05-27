@@ -2,9 +2,11 @@ import { Pen, Trash } from "phosphor-react";
 import { ChangeEvent, MouseEventHandler, useState } from "react";
 import {Fornecedor} from "../../interfaces/Fornecedores"
 import { RadioGroup } from '@headlessui/react'
+import { AxiosRequestConfig } from "axios";
 
 type Props = {
   fornecedores: Fornecedor[] 
+  onDelete: (id: number) => Promise<void>;
 }
 
 type Radio = 'nome' | 'cnpj' | 'cep'
@@ -23,7 +25,7 @@ const searchItens = {
   },
 }
 
-export const TableFornecedor = ({fornecedores}: Props) => {
+export const TableFornecedor = ({fornecedores, onDelete}: Props) => {
 
 
   const [searchValue, setSearchValue] = useState('');
@@ -55,11 +57,11 @@ export const TableFornecedor = ({fornecedores}: Props) => {
       </RadioGroup.Option>
       )})} 
       <div className= "grow flex justify-center">
-                <input className="bg-zinc-800 rounded-sm w-10/12 text-center  focus:outline-none focus:opacity-90 focus:outline-brand-500 " 
+         <input className="bg-zinc-800 rounded-sm w-10/12 text-center  focus:outline-none focus:opacity-90 focus:outline-brand-500 " 
          placeholder={`Pesquisar: ${radioItem.toUpperCase()}`}
          value = {searchValue}
          onChange= {handleSearch}
-         />    
+              />    
          </div>        
          </div>  
        </RadioGroup>
@@ -76,13 +78,13 @@ export const TableFornecedor = ({fornecedores}: Props) => {
         </tr>
         </thead>
         <tbody>
-        {filteredList.map((item) => 
+        {filteredList?.map((item) => 
         ( <tr key={item.id} className="h-auto flex justify-around border-b-2  hover:bg-zinc-700">
           <td className="w-full text-center">{item.nome}</td>
           <td className="w-full text-center ">{item.cnpj}</td>
           <td className="w-full text-center">{item.cep}</td>
-          <td className="w-full max-w-[4rem] shrink text-center"><button className="hover:bg-brand-500 transition-all rounded-full p-1"><Pen/></button></td>
-          <td className="w-full max-w-[4rem] shrink text-center"><button className="hover:bg-contrast-500 transition-all rounded-full p-1"><Trash/></button></td>
+          <td className="w-full max-w-[4rem] shrink text-center"><button className="hover:bg-brand-500 transition-all rounded-full p-1" ><Pen/></button></td>
+          <td className="w-full max-w-[4rem] shrink text-center"><button className="hover:bg-contrast-500 transition-all rounded-full p-1" onClick={() => onDelete((item.id))}><Trash/></button></td>
         </tr>
         ))}      
         </tbody>
