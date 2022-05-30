@@ -1,3 +1,4 @@
+import { error } from "console";
 import { Fornecedor } from "../../interfaces/Fornecedores";
 import { prisma } from "../prisma";
 
@@ -6,17 +7,31 @@ export async function getAllFornecedores() {
   return data;
 }
 
+export async function getFornecedorByCNPJ (cnpj: string){
+  const data = await prisma.fornecedor.findUnique({
+    where: {cnpj}
+  })
+  return data
+}
+
+export async function deleteFornecedor(cnpj: string) {
+  const data = await prisma.fornecedor.delete({
+    where: {cnpj}
+  })
+  return data
+}
+
 export async function createFornecedor(data: Fornecedor) {
   const { nome, cnpj, cep, bairro, cidade, endereco, numero, complemento } =
     data;
-  const fornecedorExists = await prisma.fornecedor.findFirst({
+  const fornecedorExists = await prisma.fornecedor.findUnique({
     where: {
       cnpj: data.cnpj,
     },
   });
 
   if (fornecedorExists) {
-    throw new Error("Fornecedor já existe");
+    throw error("forcecedor ja existe")
   }
 
   const fornecedor = await prisma.fornecedor.create({
@@ -34,3 +49,7 @@ export async function createFornecedor(data: Fornecedor) {
 
   return fornecedor;
 }
+
+
+
+

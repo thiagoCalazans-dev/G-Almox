@@ -5,10 +5,11 @@ import { FormField } from "../FormField";
 import { Button } from "../Button";
 import api from "../../services/api";
 import { Form, Formik, FormikState } from "formik";
-
+import { useEffect, useState } from "react";
 
 type Props = {
-  onSubmit: (value: Fornecedor) => Promise<void>;
+  onCreate: (value: Fornecedor) => Promise<void>;
+  onUpdate: (value: Fornecedor, cpnj:string) => Promise<void>;
 };
 
 const initialValues = {
@@ -39,18 +40,48 @@ export const schema = Yup.object().shape({
   complemento: Yup.string(),
 });
 
-export const FormFornecedor = ({ onSubmit }: Props) => {
+export const FormFornecedor = ({ onCreate, onUpdate }: Props) => {
+
+  const [isCNPJExists, setIsCNPJExists] = useState(false)
 
   const handleSubmit = async (
     values: Fornecedor,
     resetForm: (nextState?: Partial<FormikState<Fornecedor>>) => void
   ) => {
+    if (isCNPJExists) {
     try {
-      await onSubmit(values);
+      await onUpdate(values, values.cnpj);
+      console.log()
       resetForm({ values: initialValues });
     } catch (err) {
       console.log(err);
     }
+  }
+    else {
+      try {
+        await onCreate(values);
+        resetForm({ values: initialValues });
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+
+
+  const findFornecedor = async (cnpj: string, setFieldValue: any) => {
+    await api.get(`fornecedores/${cnpj}`).then((res) => {
+      const { nome, cnpj, cep, bairro, cidade, endereco, numero, complemento } =
+        res.data;
+        setIsCNPJExists(true)
+        setFieldValue("nome", nome)
+        setFieldValue("cnpj", cnpj)
+        setFieldValue("cep", cep)
+        setFieldValue("bairro", bairro)
+        setFieldValue("cidade", cidade)
+        setFieldValue("complemento", complemento)
+        setFieldValue("endereco", endereco)
+        setFieldValue("numero", numero)
+    });
   };
 
   const handleClickSearchCEP = (values: Fornecedor, setFieldValue: any) => {
@@ -84,16 +115,17 @@ export const FormFornecedor = ({ onSubmit }: Props) => {
               <div className="flex flex-col justify-between h-full w-5/6 gap-2">
                 <div>
                   <FormField
-                    label="Nome"
-                    type="text"
-                    name="nome"
-                    placeholder="Nome"
-                  />
-                  <FormField
                     label="CNPJ"
                     type="text"
                     name="cnpj"
                     placeholder="CPNJ: XX.XXX/XXXX-XX"
+                    onBlur={() => findFornecedor(values.cnpj, setFieldValue)}
+                  />
+                  <FormField
+                    label="Nome"
+                    type="text"
+                    name="nome"
+                    placeholder="Nome"
                   />
                   <div className="flex gap-2 items-end lg:flex-col ">
                     <FormField
@@ -164,9 +196,13 @@ export const FormFornecedor = ({ onSubmit }: Props) => {
                   </div>
                 </div>
                 <div className="pb-4">
+                {isCNPJExists ?
                   <Button type="submit" disabled={isSubmitting} text="Salvar">
-                    Salvar <FloppyDisk size={24} color="#ffffff" />
-                  </Button>
+                     Alterar <FloppyDisk size={24} color="#ffffff" />
+                   </Button> :
+                  <Button type="submit" disabled={isSubmitting} text="Salvar">
+                     Salvar <FloppyDisk size={24} color="#ffffff" />
+                  </Button>}
                 </div>
               </div>
             </Form>
