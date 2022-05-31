@@ -18,8 +18,8 @@ export default async function handler(
   else if (method === "POST")
   try {
     const data : Fornecedor = req.body;
-    await createFornecedor(data)
-    return res.status(201).json({ message: "Success" });
+    const f = await createFornecedor(data)
+    return res.status(201).json({ f });
   } catch (error) {
     console.log(error);
   }

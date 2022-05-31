@@ -24,7 +24,7 @@ export async function deleteFornecedor(cnpj: string) {
 export async function createFornecedor(data: Fornecedor) {
   const { nome, cnpj, cep, bairro, cidade, endereco, numero, complemento } =
     data;
-  const fornecedorExists = await prisma.fornecedor.findUnique({
+  const fornecedorExists = await prisma.fornecedor.findUnique({    
     where: {
       cnpj: data.cnpj,
     },

@@ -1,5 +1,6 @@
 import { Children, Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
+import { X } from 'phosphor-react'
 
 
 type Props = {
@@ -14,7 +15,7 @@ export const Modal = ({title, children, modal, closeModal }: Props) => {
  return (
     <>
       <Transition appear show={modal} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={closeModal}>
+        <Dialog as="div" className="relative z-10" onClose={() => console.log()}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -28,7 +29,7 @@ export const Modal = ({title, children, modal, closeModal }: Props) => {
           </Transition.Child>
 
           <div className="fixed inset-0 overflow-y-auto">
-            <div className="flex min-h-full items-center justify-center p-4">
+            <div className="flex min-h-full items-center justify-center">
               <Transition.Child
                 as={Fragment}
                 enter="ease-out duration-300"
@@ -38,10 +39,11 @@ export const Modal = ({title, children, modal, closeModal }: Props) => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-auto transform overflow-hidden rounded-2xl bg-zinc-800 p-6 transition-all">
+                <Dialog.Panel className="w-auto h-auto transform overflow-hidden rounded-2xl bg-zinc-800 px-5 pb-5 transition-all ">
+                  <button type="button"  onClick={closeModal} className="hover:bg-brand-500 transition-all rounded-full p-1 relative top-2 left-[95%]"><X/></button>
                   {title && <Dialog.Title
                     as="h3"
-                    className="text-3xl font-bold mb-6 leading-6 text-zinc-100 text-center"
+                    className="text-3xl font-bold tracking-wider text-zinc-100 text-center"                   
                   >
                     {title}
                   </Dialog.Title>}

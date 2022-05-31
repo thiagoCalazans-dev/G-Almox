@@ -8,8 +8,7 @@ import { Form, Formik, FormikState } from "formik";
 import { useEffect, useState } from "react";
 
 type Props = {
-  onCreate: (value: Fornecedor) => Promise<void>;
-  onUpdate: (value: Fornecedor, cpnj:string) => Promise<void>;
+  onSubmit: (value: Fornecedor) => Promise<void>;
 };
 
 const initialValues = {
@@ -40,47 +39,25 @@ export const schema = Yup.object().shape({
   complemento: Yup.string(),
 });
 
-export const FormFornecedor = ({ onCreate, onUpdate }: Props) => {
-
-  const [isCNPJExists, setIsCNPJExists] = useState(false)
-
+export const FormFornecedor = ({ onSubmit }: Props) => {
   const handleSubmit = async (
     values: Fornecedor,
     resetForm: (nextState?: Partial<FormikState<Fornecedor>>) => void
   ) => {
-    if (isCNPJExists) {
     try {
-      await onUpdate(values, values.cnpj);
-      console.log()
+      await onSubmit(values);
       resetForm({ values: initialValues });
     } catch (err) {
       console.log(err);
     }
-  }
-    else {
-      try {
-        await onCreate(values);
-        resetForm({ values: initialValues });
-      } catch (err) {
-        console.log(err);
-      }
-    }
   };
-
 
   const findFornecedor = async (cnpj: string, setFieldValue: any) => {
     await api.get(`fornecedores/${cnpj}`).then((res) => {
-      const { nome, cnpj, cep, bairro, cidade, endereco, numero, complemento } =
-        res.data;
-        setIsCNPJExists(true)
-        setFieldValue("nome", nome)
-        setFieldValue("cnpj", cnpj)
-        setFieldValue("cep", cep)
-        setFieldValue("bairro", bairro)
-        setFieldValue("cidade", cidade)
-        setFieldValue("complemento", complemento)
-        setFieldValue("endereco", endereco)
-        setFieldValue("numero", numero)
+      if (res.status !== 200) {
+        console.log(res);
+      }
+      console.log(res);
     });
   };
 
@@ -196,13 +173,9 @@ export const FormFornecedor = ({ onCreate, onUpdate }: Props) => {
                   </div>
                 </div>
                 <div className="pb-4">
-                {isCNPJExists ?
                   <Button type="submit" disabled={isSubmitting} text="Salvar">
-                     Alterar <FloppyDisk size={24} color="#ffffff" />
-                   </Button> :
-                  <Button type="submit" disabled={isSubmitting} text="Salvar">
-                     Salvar <FloppyDisk size={24} color="#ffffff" />
-                  </Button>}
+                    Salvar <FloppyDisk size={24} color="#ffffff" />
+                  </Button>
                 </div>
               </div>
             </Form>
