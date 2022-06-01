@@ -6,7 +6,7 @@ import { Button } from "../../../components/Button";
 import { Modal } from "../../../components/Modal";
 import { TableFornecedor } from "../../../components/tables/TableFornecedor";
 import { useModal } from "../../../hooks/useModal";
-import {Fornecedores} from "../../../interfaces/Fornecedores"
+import {Fornecedores} from "../../../interfaces/Fornecedor"
 
 
 

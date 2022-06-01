@@ -1,52 +1,51 @@
 import { FloppyDisk, MagnifyingGlass } from "phosphor-react";
-import { Fornecedor } from "../../interfaces/Fornecedores";
+import { Fornecedor } from "../../interfaces/Fornecedor";
 import * as Yup from "yup";
-import { FormField } from "../FormField";
-import { Button } from "../Button";
 import api from "../../services/api";
-import { Form, Formik, FormikState } from "formik";
-import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useContext } from "react";
+import { FornecedorContext } from "../../contexts/FornecedorContext";
+
 
 type Props = {
   onSubmit: (value: Fornecedor) => Promise<void>;
 };
 
-const initialValues = {
-  id: 0,
-  nome: "",
-  cnpj: "",
-  cep: "",
-  cidade: "",
-  endereco: "",
-  bairro: "",
-  numero: "",
-  complemento: "",
-};
+// export const validationSchema = Yup.object().shape({
+//   id: Yup.number(),
+//   nome: Yup.string().required("Campo obrigatório"),
+//   cnpj: Yup.string().length(14, "Cnpj inválido").required("Campo obrigatório "),
+//   cep: Yup.string()
+//     .min(8, "CEP Inválido")
+//     .max(10, "CEP Inválido")
+//     .required("Campo obrigatório"),
+//   cidade: Yup.string().required("Campo obrigatório"),
+//   estado: Yup.string().required("Campo obrigatório"),
+//   endereco: Yup.string().required("Campo obrigatório"),
+//   bairro: Yup.string().required("Campo obrigatório"),
+//   numero: Yup.string().required("Campo obrigatório"),
+//   complemento: Yup.string(),
+// });
 
-export const schema = Yup.object().shape({
-  id: Yup.number(),
-  nome: Yup.string().required("Campo obrigatório"),
-  cnpj: Yup.string().length(14, "Cnpj inválido").required("Campo obrigatório "),
-  cep: Yup.string()
-    .min(8, "CEP Inválido")
-    .max(10, "CEP Inválido")
-    .required("Campo obrigatório"),
-  cidade: Yup.string().required("Campo obrigatório"),
-  estado: Yup.string().required("Campo obrigatório"),
-  endereco: Yup.string().required("Campo obrigatório"),
-  bairro: Yup.string().required("Campo obrigatório"),
-  numero: Yup.string().required("Campo obrigatório"),
-  complemento: Yup.string(),
-});
+export const FormFornecedor = () => {
+const {FormDefaultValues} = useContext(FornecedorContext);
 
-export const FormFornecedor = ({ onSubmit }: Props) => {
-  const handleSubmit = async (
-    values: Fornecedor,
-    resetForm: (nextState?: Partial<FormikState<Fornecedor>>) => void
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useForm({
+    defaultValues: FormDefaultValues,
+    // resolver: yupResolver(validationSchema),
+  });
+  
+  const onSubmit = async (
+    values: Fornecedor
   ) => {
     try {
-      await onSubmit(values);
-      resetForm({ values: initialValues });
+      await onSubmit(values);    
     } catch (err) {
       console.log(err);
     }
@@ -77,111 +76,101 @@ export const FormFornecedor = ({ onSubmit }: Props) => {
   return (
     <>
       <div className="flex flex-col justify-center w-full h-full">
-        <Formik
-          validationSchema={schema}
-          initialValues={initialValues}
-          onSubmit={(values, { resetForm }) => {
-            handleSubmit(values, resetForm);
-          }}
-        >
-          {({ isSubmitting, setFieldValue, values }) => (
-            <Form className="mx-auto  w-5/6 h-5/6 bg-zinc-800 shadow-sm shadow-zinc-800 rounded-xl flex flex-col items-center gap-3 overflow-y-auto scrollbar-thumb-zinc-700 scrollbar-track-transparent scrollbar-thin lg:w-auto lg:overflow-hidden lg:h-auto">
-              <h2 className="w-full text-center text-4xl mt-4 font-bold">
-                Cadastro
-              </h2>
-              <div className="flex flex-col justify-between h-full w-5/6 gap-2">
-                <div>
-                  <FormField
-                    label="CNPJ"
-                    type="text"
-                    name="cnpj"
-                    placeholder="CPNJ: XX.XXX/XXXX-XX"
-                    onBlur={() => findFornecedor(values.cnpj, setFieldValue)}
-                  />
-                  <FormField
-                    label="Nome"
-                    type="text"
-                    name="nome"
-                    placeholder="Nome"
-                  />
-                  <div className="flex gap-2 items-end lg:flex-col ">
-                    <FormField
-                      label="CEP"
-                      type="text"
-                      name="cep"
-                      placeholder="CEP: XXXXX-XX"
-                      button={
-                        <Button
-                          type="button"
-                          onClick={() =>
-                            handleClickSearchCEP(values, setFieldValue)
-                          }
-                          className="w-auto flex items-end justify-center px-8 text-xl bg-brand-500 hover:bg-brand-100 text-white py-2 rounded-md transition duration-100 lg:w-full"
-                        >
-                          <MagnifyingGlass size={20} />
-                        </Button>
-                      }
-                    />
-                  </div>
-                  <div className="flex gap-2">
-                    <div className="w-2/3">
-                      <FormField
-                        label="Cidade"
-                        type="text"
-                        name="cidade"
-                        placeholder="Cidade"
-                      />
-                    </div>
-                    <div className="w-1/3">
-                      <FormField
-                        label="Estado"
-                        type="text"
-                        name="estado"
-                        placeholder="Estado"
-                      />
-                    </div>
-                  </div>
-                  <FormField
-                    label="Endereço"
-                    type="text"
-                    name="endereco"
-                    placeholder="Endereço"
-                  />
-                  <FormField
-                    label="Bairro"
-                    type="text"
-                    name="bairro"
-                    placeholder="bairro "
-                  />
-                  <div className="flex gap-2">
-                    <div className="w-1/4">
-                      <FormField
-                        label="Número"
-                        type="text"
-                        name="numero"
-                        placeholder="Nº"
-                      />
-                    </div>
-                    <div className="grow">
-                      <FormField
-                        label="Complemento"
-                        type="text"
-                        name="complemento"
-                        placeholder="Complemento"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="pb-4">
-                  <Button type="submit" disabled={isSubmitting} text="Salvar">
-                    Salvar <FloppyDisk size={24} color="#ffffff" />
-                  </Button>
-                </div>
+        <form className="mx-auto py-4 w-5/6 h-auto bg-zinc-800 shadow-sm shadow-zinc-800 rounded-xl flex flex-col items-center gap-3 overflow-y-auto scrollbar-thumb-zinc-700 scrollbar-track-transparent scrollbar-thin lg:w-auto lg:overflow-hidden lg:h-auto">
+          <h2 className="w-full text-center text-4xl font-bold">
+            Cadastro
+          </h2>
+          <div className="flex flex-col gap-y-1 h-full w-5/6 p-4">
+            <label className="label">CPNJ:</label>
+            <input
+              className="input"
+              type="text"
+              name="cnpj"
+              placeholder="CPNJ: XX.XXX/XXXX-XX"
+            />
+            <label className="label">Nome:</label>
+            <input
+              className="input"
+              type="text"
+              name="nome"
+              placeholder="Nome"
+            />          
+              <label className="label">CEP:</label>
+              <div className="flex gap-2 items-end lg:flex-col ">
+              <input
+                className="input"
+                type="text"
+                name="cep"
+                placeholder="CEP: XXXXX-XX"
+              />
+              <button type="button" className="btn">
+                <MagnifyingGlass size={20} />
+              </button>
+            </div>
+            <div className="flex gap-2">
+              <div className="w-2/3">
+                <label className="label">Cidade:</label>
+                <input
+                  className="input"
+                  type="text"
+                  name="cidade"
+                  placeholder="Cidade"
+                />
               </div>
-            </Form>
-          )}
-        </Formik>
+              <div className="w-1/3">
+              <label className="label">Estado:</label>
+                <input
+                  className="input"
+                  type="text"
+                  name="estado"
+                  placeholder="Estado"
+                />
+              </div>
+            </div>
+            <label className="label">Endereço:</label>
+            <input
+              className="input"
+              type="text"
+              name="endereco"
+              placeholder="Endereço"
+            />
+               <label className="label">Bairro:</label>
+            <input
+              className="input"
+              type="text"
+              name="bairro"
+              placeholder="bairro "
+            />
+            <div className="flex gap-2">
+              <div className="w-1/4">
+              <label className="label">Nº:</label>
+                <input
+                  className="input"
+                  type="text"
+                  name="numero"
+                  placeholder="Nº"
+                />
+              </div>
+              <div className="grow">
+              <label className="label">Complemento:</label>
+                <input
+                  className="input"
+                  type="text"
+                  name="complemento"
+                  placeholder="Complemento"
+                />
+              </div>
+            </div>
+            <button className="btn flex mt-4 gap-1 justify-center" type="submit">
+              Salvar <FloppyDisk size={24} color="#ffffff" />
+            </button>
+          </div>
+        </form>
       </div>
     </>
   );
 };
+function yupResolver(validationSchema: any): import("react-hook-form").Resolver<any, any> | undefined {
+  throw new Error("Function not implemented.");
+}
+

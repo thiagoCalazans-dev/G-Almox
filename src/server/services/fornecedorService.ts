@@ -1,5 +1,5 @@
 import { error } from "console";
-import { Fornecedor } from "../../interfaces/Fornecedores";
+import { Fornecedor } from "../../interfaces/Fornecedor";
 import { prisma } from "../prisma";
 
 export async function getAllFornecedores() {

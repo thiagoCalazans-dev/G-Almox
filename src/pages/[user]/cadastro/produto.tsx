@@ -6,7 +6,7 @@ import { produtoslist } from "../../../../data";
 import { FormProduto } from "../../../components/forms/FormProduto";
 import { useModal } from "../../../hooks/useModal";
 import { Modal } from "../../../components/Modal";
-import { Button } from "../../../components/Button";
+
 
 const Produto = () => {
   const [produtos, setProdutos] = useState<Produto[]>(produtoslist);
@@ -23,9 +23,9 @@ const Produto = () => {
         <div className=" flex  flex-col w-1/2 items-center p-6 bg-zinc-800 shadow-sm shadow-zinc-800 rounded-xl">       
           <TableProdutos produtos={produtos} />   
           <div>
-          <Button type="button" onClick={openModal}>
+          <button className="btn"type="button" onClick={openModal}>
             Cadastrar
-          </Button>        
+          </button>        
             </div>         
               <Modal title="Cadastro de produto"modal={modal} closeModal={closeModal}>
             <FormProduto closeOnSubmit={closeModal} />

@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { Fornecedor } from "../../../interfaces/Fornecedores";
+import { Fornecedor } from "../../../interfaces/Fornecedor";
 import { createFornecedor, getAllFornecedores } from "../../../server/services/fornecedorService";
 
 export default async function handler(

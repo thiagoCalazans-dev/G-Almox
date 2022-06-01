@@ -7,3 +7,19 @@ body {
   @apply bg-zinc-900 bg-opacity-95 text-zinc-100
 }
 
+@layer components {
+  .btn {
+    @apply  py-2 px-4 bg-brand-500 text-zinc-100 font-semibold rounded shadow-md hover:bg-opacity-30 focus:outline-none disabled:opacity-50 transition duration-200;
+  }
+  .btn-contrast {
+    @apply  py-2 px-4 bg-contrast-500 text-zinc-100 font-semibold rounded shadow-md hover:bg-opacity-30 focus:outline-none disabled:opacity-50 transition duration-200;
+  }
+  .input {
+    @apply w-full px-4 py-2 border-0 rounded-md text-sm  bg-zinc-700 focus:ring-brand-500
+  }
+  .label {
+    @apply text-lg font-semibold
+  }
+  /* ... */
+}
+

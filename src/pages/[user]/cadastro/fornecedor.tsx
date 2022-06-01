@@ -1,22 +1,16 @@
 import { FormFornecedor } from "../../../components/forms/FormFornecedor";
 import { Navbar } from "../../../components/Navbar";
-import { Fornecedor } from "../../../interfaces/Fornecedores";
+import { Fornecedor } from "../../../interfaces/Fornecedor";
 import { useSWRFetch } from "../../../hooks/useFetch";
 import api from "../../../services/api";
 import { useSearchBar } from "../../../hooks/useTableSearchBar";
-import { Table } from "../../../components/Table";
-import { TableHead } from "../../../components/Table/TableHead";
-import { TableTitleColumns } from "../../../components/Table/TableTitleColumns";
-import { TableBody } from "../../../components/Table/TableBody";
-import { TableRow } from "../../../components/Table/TableRow";
-import { TableData } from "../../../components/Table/TableData";
 import { TableDetailsButton } from "../../../components/Table/TableDetailsButton";
 import { TableDeleteButton } from "../../../components/Table/TableDeleteButton";
 import { Modal } from "../../../components/Modal";
 import { useModal } from "../../../hooks/useModal";
 import { useState } from "react";
 import { ArrowFatLeft, ArrowFatRight } from "phosphor-react";
-import { Button } from "../../../components/Button";
+import Table from "../../../components/Table";
 
 const searchItens = [
   {
@@ -34,10 +28,10 @@ const searchItens = [
 ];
 
 const Fornecedor = () => {
-  const { closeModal, openModal, modal } = useModal();
   const { data, mutate } = useSWRFetch<Fornecedor[]>("fornecedores");
   const { SearchComponent, filteredList } = useSearchBar({ data, searchItens });
   const [detailsData, setDetailsData] = useState({} as Fornecedor);
+  const {closeModal, modal, openModal} = useModal()
 
   const postFornecedor = async (value: Fornecedor) => {
     await api.post("fornecedores", value);
@@ -67,41 +61,38 @@ const Fornecedor = () => {
 
   return (
     <div className="w-screen h-screen flex flex-col">
-      <Navbar />
-      <div className="flex justify-evenly w-full h-full lg:flex-col lg:items-center lg:h-auto lg:justify-center lg:my-4">
-        <div className="w-1/3 border-r-[1px] border-zinc-800 border-opacity-80 lg:w-auto">
-          <FormFornecedor
-            onSubmit={postFornecedor}  />        
-        </div>
-        <div className="w-2/3 lg:w-[600px]">
-          <div className="w-full  h-full flex flex-col items-center py-8">
+      <Navbar />  
+              <Modal modal={modal} closeModal={closeModal}>
+               <FormFornecedor  />  
+               </Modal>         
+              <div className="w-full  h-full flex flex-col items-center py-8">
             <div className="w-11/12 h-full flex flex-col items-center">
               <h1 className="w-11/12 text-center p-2 text-4xl font-bold border-b-2 rounded-t-md">
                 Fornecedores
               </h1>
               <SearchComponent />
-              <Table>
-                <TableHead>
-                  <TableTitleColumns title="Nome" />
-                  <TableTitleColumns title="CNPJ" />
-                  <TableTitleColumns title="CEP" />
-                  <TableTitleColumns
+              <Table.Container>
+                <Table.Head>
+                  <Table.TitleColumns title="Nome" />
+                  <Table.TitleColumns title="CNPJ" />
+                  <Table.TitleColumns title="CEP" />
+                  <Table.TitleColumns
                     title="Detalhes"
                     className="max-w-[5rem] shrink"
                   />
-                  <TableTitleColumns
+                  <Table.TitleColumns
                     title="Excluir"
                     className="max-w-[5rem] shrink"
                   />
-                </TableHead>
-                <TableBody>
+                </Table.Head>
+                <Table.Body>
                   {filteredList?.map((item) => (
-                    <TableRow key={item.id}>
-                      <TableData>{item.nome}</TableData>
-                      <TableData>{item.cnpj}</TableData>
-                      <TableData>{item.cep}</TableData>
-                      <TableData className="max-w-[5rem] shrink text-center">
-                        <TableDetailsButton
+                    <Table.Row key={item.id}>
+                      <Table.Data>{item.nome}</Table.Data>
+                      <Table.Data>{item.cnpj}</Table.Data>
+                      <Table.Data>{item.cep}</Table.Data>
+                      <Table.Data className="max-w-[5rem] shrink text-center">
+                        <Table.DetailsButton
                           onClick={() => handleDetailsClick(item)}
                         />
                         <Modal
@@ -127,27 +118,25 @@ const Fornecedor = () => {
                             <button className="hover:bg-contrast-500 transition-all rounded-full px-2">
                               <ArrowFatLeft size={26} />
                             </button>
-                            <Button>Editar</Button>
+                            <button className="btn">Editar</button>
                             <button className="hover:bg-contrast-500 transition-all rounded-full px-2">
                               <ArrowFatRight size={26} />
                             </button>
                           </div>
                         </Modal>
-                      </TableData>
-                      <TableData className="max-w-[5rem] shrink text-center">
-                        <TableDeleteButton
+                      </Table.Data>
+                      <Table.Data className="max-w-[5rem] shrink text-center">
+                        <Table.DeleteButton                        
                           onClick={() => deleteFornecedor(item.cnpj)}
                         />
-                      </TableData>
-                    </TableRow>
+                      </Table.Data>
+                    </Table.Row>
                   ))}
-                </TableBody>
-              </Table>
+                </Table.Body>
+              </Table.Container>
             </div>
+          </div>  
           </div>
-        </div>
-      </div>
-    </div>
   );
 };
 
