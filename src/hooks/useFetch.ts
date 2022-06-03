@@ -1,16 +1,11 @@
-import { RESPONSE_LIMIT_DEFAULT } from 'next/dist/server/api-utils';
 import useSWR from 'swr'
-import SWR from 'swr'
 import api from '../services/api'
 
-
-
-
-export function useSWRFetch<t>(url: string)
+export function useSWRFetch<T>(url: string )
 {
-    const {data, error, mutate} = useSWR<t>(url, async url => {
-        const response = await api.get(url);     
-        return response.data;
+    const {data, error, mutate} = useSWR<T>(url, async url => {        
+        const {data} = await api.get(url)
+        return data
     })
 
     return {data, error, mutate}

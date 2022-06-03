@@ -3,7 +3,7 @@ import { Fornecedor } from "../../interfaces/Fornecedor";
 import { prisma } from "../prisma";
 
 export async function getAllFornecedores() {
-  const data = await prisma.fornecedor.findMany();
+    const data = await prisma.fornecedor.findMany();
   return data;
 }
 

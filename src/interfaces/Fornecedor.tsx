@@ -1,5 +1,5 @@
-export interface Fornecedor {
-  id: number;
+export type Fornecedor = {
+  id: string;
   nome: string,
   cnpj: string,
   cep: string,
